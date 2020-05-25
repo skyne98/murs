@@ -5,11 +5,7 @@ set -o errexit -o nounset
 rev=$(git rev-parse --short HEAD)
 
 # assemble the output
-mkdir -p output/{book}
-
-cp index.html output/index.html
-
-mv book/book/* output/book/
+mv book/book/* output/
 
 # now deploy
 cd output
