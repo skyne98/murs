@@ -5,6 +5,7 @@ set -o errexit -o nounset
 rev=$(git rev-parse --short HEAD)
 
 # assemble the output
+mkdir output
 mv book/book/* output/
 
 # now deploy
