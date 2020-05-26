@@ -18,11 +18,11 @@
     <a href="https://skyne98.github.io/murs/"><strong>Explore the book »</strong></a>
     <br />
     <br />
-    <a href="https://skyne98.github.io/murs/issues">Report Issue</a>
+    <a href="https://github.com/skyne98/murs/issues">Report Issue</a>
     ·
-    <a href="https://skyne98.github.io/murs/issues">Request Feature</a>
+    <a href="https://github.com/skyne98/murs/issues">Request Feature</a>
     ·
-    <a href="https://skyne98.github.io/murs/pulls">Send a Pull Request</a>
+    <a href="https://github.com/skyne98/murs/pulls">Send a Pull Request</a>
   </p>
 </p>
 
