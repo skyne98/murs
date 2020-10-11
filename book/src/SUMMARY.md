@@ -1,7 +1,7 @@
 # Summary
 
-- [Test](test.md)
+- [Thing](thing.md)
 
 -----------
 
-[Contributors](test.md)
+[Contributors](contributors.md)
