@@ -16,17 +16,60 @@ Rock:
 
 ## Materials
 Materials of items describe their volume in relation to their weight (mass), their hit points in relation to their weight (mass) and their ability to withstand temperatures.
+
+Class S (200-300 durability):
+```
+Meteorite Steel:
+    density: 3730 kg/m3
+    class: S
+    durability: 200 hp/kg
+```
+Class A (100-199 durability):
 ```
 Diamond:
     density: 3539 kg/m3
-    strength: 28000 hp/m3
-    max temperature: 4000 °c
+    class: A
+    durability: 100 hp/kg
 ```
+Class B (35-99 durability):
+```
+Steel:
+    density: 8050 kg/m3
+    class: B
+    durability: 35 hp/kg
+```
+Class C (10-34 durability):
 ```
 Granite:
     density: 2750 kg/m3
-    strength: 150 hp/m3
-    max temperature: 1260 °c
+    class: C
+    durability: 10 hp/kg
+```
+Class D (3-9 durability):
+```
+Bone:
+    density: 1850 kg/m3
+    class: D
+    durability: 5 hp/kg
+```
+```
+Oak:
+    density: 2750 kg/m3
+    class: D
+    durability: 3 hp/kg
+```
+Class F (0-2 durability):
+```
+Meat:
+    density: 1093 kg/m3
+    class: D
+    durability: 2 hp/kg
+```
+```
+Glass:
+    density: 2500 kg/m3
+    class: D
+    durability: 2 hp/kg
 ```
 
 ### Creating a new material
