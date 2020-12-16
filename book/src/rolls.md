@@ -1,4 +1,4 @@
-# Rolls
+# Rolls (WIP)
 * D20, D6 - allowed dice
 * Rolls are allowed to have modifiers (e.g. 1d20 + 5)
 * max(1d20, 5), min(1d20, 5) are allowed functions
