@@ -2,6 +2,8 @@
 
 - [Thing](thing.md)
 - [Rolls](rolls.md)
+- [Attributes](attributes.md)
+- [Skills](skills.md)
 
 -----------
 
