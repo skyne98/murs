@@ -5,6 +5,8 @@
 - Intelligence (__IQ__)
 - Fitness (__FIT__)
 
+Default attribute value is __10__, which gives you a default __50%__ chance of __success__.
+
 Attribute checks are the base __all game mechanics__. Whenever the character is trying to do something in a limited amount of time, or something which might have serious consequences for the character - an attribute check has to be made.\
 GM (_Game Master_) can use attributes and attribute checks as the only mechanic in their campaign, relying on them for resolving conflicts and growing characters, however, we strongly recommend to follow the complete set of rules (_including things like skills, carrying capacity, armor, etc_).
 
@@ -21,4 +23,5 @@ A measure of the character's ability to learn, to understand or to deal with new
 In some campaigns character's __INT__ can influence the power of their magic spells, or level of tech they can try to operate (_a knight finding a gun_).
 
 ### Fitness
-A measure of the character's health and overall ability to withhold damage, poison, illnesses and other harmful effects.
+A measure of the character's health and overall ability to withhold damage, poison, illnesses and other harmful effects.\
+__FIT__ is directly used for the calculation of character's hit points. 
