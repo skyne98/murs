@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-    <a href="https://github.com/skyne98/murs/index.html">
+    <a href="https://github.com/skyne98/murs/">
         <img src="./assets/planet.svg" alt="Logo" width="80" height="80">
     </a>
     <br />
