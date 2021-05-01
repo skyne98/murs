@@ -20,12 +20,12 @@ jobs:
     - name: Build for Windows
       run: |
         cd src
-        cargo build --release --target x86_64-pc-windows-msvc --verbose
+        cargo build --release --target x86_64-pc-windows-gnu --verbose
     - name: Archive Windows build
       uses: actions/upload-artifact@v2
       with:
         name: windows-build
-        path: src/target/x86_64-pc-windows-msvc/release
+        path: src/target/x86_64-pc-windows-gnu/release
         
     - name: Build for Linux
       run: |
