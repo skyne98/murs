@@ -1,0 +1,18 @@
+[package]
+name = "murs"
+version = "0.1.0"
+authors = ["skyne98 <ahalahan@gmail.com>"]
+edition = "2018"
+
+[[bin]]
+name = "mrk"
+path = "bin/mrk.rs"
+
+[dependencies]
+semver = "0.11.0"
+structopt = "0.3.21"
+anyhow = "1.0.38"
+tokio = { version = "1.2.0", features = ["full"] }
+toml = "0.5.8"
+serde = "1.0.123"
+serde_derive = "1.0.123"

@@ -11,6 +11,7 @@
     </sub>
 
   <h3 align="center">MURS</h3>
+  <p align="center"> /ˈmɑɹz/</p>
 
   <p align="center">
     A modular universal role-playing system
