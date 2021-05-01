@@ -10,9 +10,8 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
+  build-win:
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -20,13 +19,18 @@ jobs:
     - name: Build for Windows
       run: |
         cd src
-        cargo build --release --target x86_64-pc-windows-gnu --verbose
+        cargo build --release --verbose
     - name: Archive Windows build
       uses: actions/upload-artifact@v2
       with:
         name: windows-build
         path: src/target/x86_64-pc-windows-gnu/release
-        
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
     - name: Build for Linux
       run: |
         cd src
