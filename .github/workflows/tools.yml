@@ -1,0 +1,34 @@
+name: Tools
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Build for Windows
+      run: cargo build --release --target x86_64-pc-windows-msvc --verbose
+    - name: Archive Windows build
+      uses: actions/upload-artifact@v2
+      with:
+        name: windows-build
+        path: src/target/x86_64-pc-windows-msvc/release
+        
+    - name: Build for Linux
+      run: cargo build --release --target x86_64-unknown-linux-musl --verbose
+    - name: Archive Linux build
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux-build
+        path: src/target/x86_64-unknown-linux-musl
