@@ -49,8 +49,7 @@ Goals of the project include:
 - Setting-independent core
 
 ### Built With
-This project is built using exclusively open-source technologies. Markdown is used as the main text format. mdBook is used to generate a static book-like set of webpages.
+This project is built using exclusively open-source technologies. Markdown is used as the main text format.
 * [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
-* [mdBook](https://github.com/rust-lang/mdBook)
 
 

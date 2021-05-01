@@ -1,5 +1,0 @@
-C:\Users\ahala\Documents\Development\Projects\murs\src\Murs.Core\bin\Debug\netstandard2.0\Murs.Core.deps.json
-C:\Users\ahala\Documents\Development\Projects\murs\src\Murs.Core\bin\Debug\netstandard2.0\Murs.Core.dll
-C:\Users\ahala\Documents\Development\Projects\murs\src\Murs.Core\obj\Debug\netstandard2.0\Murs.Core.csprojAssemblyReference.cache
-C:\Users\ahala\Documents\Development\Projects\murs\src\Murs.Core\obj\Debug\netstandard2.0\Murs.Core.AssemblyInfoInputs.cache
-C:\Users\ahala\Documents\Development\Projects\murs\src\Murs.Core\obj\Debug\netstandard2.0\Murs.Core.AssemblyInfo.cs
