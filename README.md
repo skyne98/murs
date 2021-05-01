@@ -16,7 +16,7 @@
   <p align="center">
     A modular universal role-playing system
     <br />
-    <a href="https://skyne98.github.io/murs/"><strong>Explore the book »</strong></a>
+    <a href="https://skyne98.github.io/murs/index.html"><strong>Explore the book »</strong></a>
     <br />
     <br />
     <a href="https://github.com/skyne98/murs/issues">Report Issue</a>
