@@ -1,10 +1,7 @@
-extern crate structopt;
-#[macro_use]
-extern crate log;
-
 use anyhow::Result;
 use colored::*;
 use indicatif::ProgressBar;
+use log::info;
 use mpk::{
     actions::package::package_module,
     utils::fs::{read_package_manifest, read_units},
