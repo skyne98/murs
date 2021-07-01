@@ -1,0 +1,128 @@
+extern crate structopt;
+#[macro_use]
+extern crate log;
+
+use anyhow::Result;
+use colored::*;
+use indicatif::ProgressBar;
+use mpk::{
+    actions::package::package_module,
+    utils::fs::{read_package_manifest, read_units},
+};
+use std::{env::current_dir, path::PathBuf};
+use structopt::StructOpt;
+
+#[derive(Debug, StructOpt)]
+#[structopt(
+    name = "mpk",
+    about = "Module and package keeper for all of your MURS needs."
+)]
+enum Opt {
+    #[structopt(
+        name = "parse",
+        about = "Parse the current environment for debug purposes."
+    )]
+    Parse {
+        #[structopt(parse(from_os_str), short, long)]
+        dir: Option<PathBuf>,
+    },
+    #[structopt(name = "pkg", about = "Package the contents of a module into a book.")]
+    Package {
+        #[structopt(parse(from_os_str), short, long)]
+        dir: Option<PathBuf>,
+    },
+    #[structopt(
+        name = "serve",
+        about = "Package the contents of a module into a book and serve it."
+    )]
+    Serve {
+        #[structopt(parse(from_os_str), short, long)]
+        dir: Option<PathBuf>,
+    },
+}
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    pretty_env_logger::init();
+
+    let opt = Opt::from_args();
+    match opt {
+        Opt::Parse { dir: None } => {
+            let current_dir = current_dir()?;
+            let (manifest_path, module) = read_package_manifest(current_dir).await?;
+            println!("{:#?}", module);
+
+            let unit_dir = manifest_path.parent().unwrap().join("units");
+            let units = read_units(unit_dir).await?;
+            println!("{:#?}", units);
+        }
+        Opt::Parse { dir: Some(ref dir) } => {
+            let (manifest_path, module) = read_package_manifest(dir).await?;
+            println!("{:#?}", module);
+
+            let unit_dir = manifest_path.parent().unwrap().join("units");
+            let units = read_units(unit_dir).await?;
+            println!("{:#?}", units);
+        }
+        Opt::Package { dir: None } => {
+            // Read/parse the module and units
+            let current_dir = current_dir()?;
+            let (manifest_path, module) = read_package_manifest(current_dir).await?;
+
+            let unit_dir = manifest_path.parent().unwrap().join("units");
+            let units = read_units(unit_dir).await?;
+
+            // Build the book
+            let book_build_path = package_module(&module, &units).await?;
+            info!("Book built at {}", book_build_path.display());
+        }
+        Opt::Package { dir: Some(ref dir) } => {
+            let (manifest_path, module) = read_package_manifest(dir).await?;
+
+            let unit_dir = manifest_path.parent().unwrap().join("units");
+            let units = read_units(unit_dir).await?;
+
+            // Build the book
+            let book_build_path = package_module(&module, &units).await?;
+            info!("Book built at {}", book_build_path.display());
+        }
+        Opt::Serve { dir: None } => {
+            // Read/parse the module and units
+            let current_dir = current_dir()?;
+            let (manifest_path, module) = read_package_manifest(current_dir).await?;
+
+            let unit_dir = manifest_path.parent().unwrap().join("units");
+            let units = read_units(unit_dir).await?;
+
+            // Build the book
+            let book_build_path = package_module(&module, &units).await?;
+            info!("Book built at {}", book_build_path.display());
+
+            // Serve the files
+            println!("Serving the book at {}", "127.0.0.1:3030".yellow());
+            warp::serve(warp::fs::dir(book_build_path))
+                .run(([127, 0, 0, 1], 3030))
+                .await;
+        }
+        Opt::Serve { dir: Some(ref dir) } => {
+            let (manifest_path, module) = read_package_manifest(dir).await?;
+
+            let unit_dir = manifest_path.parent().unwrap().join("units");
+            let units = read_units(unit_dir).await?;
+
+            // Build the book
+            let build_bar = ProgressBar::new_spinner().with_message("Building the book...");
+            let book_build_path = package_module(&module, &units).await?;
+            info!("Book built at {}", book_build_path.display());
+            build_bar.finish_and_clear();
+
+            // Serve the files
+            println!("Serving the book at {}", "http://127.0.0.1:3030".yellow());
+            warp::serve(warp::fs::dir(book_build_path))
+                .run(([127, 0, 0, 1], 3030))
+                .await;
+        }
+    }
+
+    Ok(())
+}
