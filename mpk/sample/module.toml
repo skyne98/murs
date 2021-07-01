@@ -1,5 +1,0 @@
-name = "sample-package"
-version = "0.1.0"
-
-[dependencies]
-help = "0.0.1"
