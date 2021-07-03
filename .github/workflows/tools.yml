@@ -18,13 +18,12 @@ jobs:
     
     - name: Build for Windows
       run: |
-        cd src
-        cargo build --release --verbose
+        cargo install --path src --root install --verbose
     - name: Archive Windows build
       uses: actions/upload-artifact@v2
       with:
         name: windows-build
-        path: src/target/release
+        path: install
   build-linux:
     runs-on: ubuntu-latest
 
@@ -33,10 +32,9 @@ jobs:
     
     - name: Build for Linux
       run: |
-        cd src
-        cargo build --release --verbose
+        cargo install --path src --root install --verbose
     - name: Archive Linux build
       uses: actions/upload-artifact@v2
       with:
         name: linux-build
-        path: src/target/release
+        path: install

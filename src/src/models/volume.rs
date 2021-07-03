@@ -8,3 +8,7 @@ pub enum VolumeOrigin {
 pub struct Volume {
     pub origin: VolumeOrigin,
 }
+
+impl Volume {
+    
+}

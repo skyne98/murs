@@ -23,7 +23,11 @@ enum Opt {
         #[structopt(parse(from_os_str), short, long)]
         dir: Option<PathBuf>,
     },
-    #[structopt(name = "pkg", about = "Package the contents of a module into a book.")]
+    #[structopt(
+        name = "package",
+        alias = "pkg",
+        about = "Package the contents of a module into a book."
+    )]
     Package {
         #[structopt(parse(from_os_str), short, long)]
         dir: Option<PathBuf>,
