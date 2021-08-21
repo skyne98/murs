@@ -48,16 +48,14 @@ async fn main() -> Result<()> {
 
     let opt = Opt::from_args();
     match opt {
-        Opt::Parse { dir: None } => {
-            let current_dir = current_dir()?;
-            let (manifest_path, module) = read_package_manifest(current_dir).await?;
-            println!("{:#?}", module);
-
-            let unit_dir = manifest_path.parent().unwrap().join("units");
-            let units = read_units(unit_dir).await?;
-            println!("{:#?}", units);
-        }
-        Opt::Parse { dir: Some(ref dir) } => {
+        Opt::Parse { dir } => {
+            // Read/parse the module and units
+            let dir = if let Some(dir) = dir {
+                dir
+            } else {
+                let current_dir = current_dir()?;
+                current_dir
+            };
             let (manifest_path, module) = read_package_manifest(dir).await?;
             println!("{:#?}", module);
 
@@ -65,19 +63,14 @@ async fn main() -> Result<()> {
             let units = read_units(unit_dir).await?;
             println!("{:#?}", units);
         }
-        Opt::Package { dir: None } => {
+        Opt::Package { dir } => {
             // Read/parse the module and units
-            let current_dir = current_dir()?;
-            let (manifest_path, module) = read_package_manifest(current_dir).await?;
-
-            let unit_dir = manifest_path.parent().unwrap().join("units");
-            let units = read_units(unit_dir).await?;
-
-            // Build the book
-            let book_build_path = package_module(&module, &units).await?;
-            info!("Book built at {}", book_build_path.display());
-        }
-        Opt::Package { dir: Some(ref dir) } => {
+            let dir = if let Some(dir) = dir {
+                dir
+            } else {
+                let current_dir = current_dir()?;
+                current_dir
+            };
             let (manifest_path, module) = read_package_manifest(dir).await?;
 
             let unit_dir = manifest_path.parent().unwrap().join("units");
@@ -87,10 +80,15 @@ async fn main() -> Result<()> {
             let book_build_path = package_module(&module, &units).await?;
             info!("Book built at {}", book_build_path.display());
         }
-        Opt::Serve { dir: None } => {
+        Opt::Serve { dir } => {
             // Read/parse the module and units
-            let current_dir = current_dir()?;
-            let (manifest_path, module) = read_package_manifest(current_dir).await?;
+            let dir = if let Some(dir) = dir {
+                dir
+            } else {
+                let current_dir = current_dir()?;
+                current_dir
+            };
+            let (manifest_path, module) = read_package_manifest(dir).await?;
 
             let unit_dir = manifest_path.parent().unwrap().join("units");
             let units = read_units(unit_dir).await?;
@@ -101,24 +99,6 @@ async fn main() -> Result<()> {
 
             // Serve the files
             println!("Serving the book at {}", "127.0.0.1:3030".yellow());
-            warp::serve(warp::fs::dir(book_build_path))
-                .run(([127, 0, 0, 1], 3030))
-                .await;
-        }
-        Opt::Serve { dir: Some(ref dir) } => {
-            let (manifest_path, module) = read_package_manifest(dir).await?;
-
-            let unit_dir = manifest_path.parent().unwrap().join("units");
-            let units = read_units(unit_dir).await?;
-
-            // Build the book
-            let build_bar = ProgressBar::new_spinner().with_message("Building the book...");
-            let book_build_path = package_module(&module, &units).await?;
-            info!("Book built at {}", book_build_path.display());
-            build_bar.finish_and_clear();
-
-            // Serve the files
-            println!("Serving the book at {}", "http://127.0.0.1:3030".yellow());
             warp::serve(warp::fs::dir(book_build_path))
                 .run(([127, 0, 0, 1], 3030))
                 .await;

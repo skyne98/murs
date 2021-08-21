@@ -1,5 +1,6 @@
 name = "sample-package"
+title = "Sample Package"
 version = "0.1.0"
 
 [dependencies]
-help = "0.0.1"
+help = { version = "0.0.1" }

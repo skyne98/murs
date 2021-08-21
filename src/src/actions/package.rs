@@ -8,14 +8,13 @@ use anyhow::Result;
 use log::info;
 use mdbook::{config::BookConfig, Config, MDBook};
 use tempfile::tempdir;
-use tokio::fs::read_dir;
 
 pub async fn package_module(module: &Module, units: &Vec<Unit>) -> Result<PathBuf> {
     // Setup the book
     let book_directory = tempdir()?.into_path();
     let mut config: Config = Default::default();
     let mut book_config: BookConfig = Default::default();
-    book_config.title = Some(format!("{} {}", module.name.clone(), module.version));
+    book_config.title = Some(format!("{} {}", module.title.clone(), module.version));
     config.book = book_config;
     let mdbook = MDBook::init(&book_directory)
         .with_config(config.clone())
