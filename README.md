@@ -18,6 +18,8 @@
     <br />
     <a href="https://skyne98.github.io/murs/index.html"><strong>Explore the book »</strong></a>
     <br />
+    <a href="https://github.com/skyne98/murs-library">Visit the library »</a>
+    <br />
     <br />
     <a href="https://github.com/skyne98/murs/issues">Report Issue</a>
     ·
