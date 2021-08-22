@@ -15,29 +15,7 @@ pub struct Module {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ModuleDependency {
-    pub volume: Option<VolumeReference>,
     /// Version of the module to require.
-    /// This will search through all the tags formatted like `<module-name>-<version>` (like `hello-world-1.0.0`).
+    /// This will search through all the tags formatted like `<module-name>` (like `hello-world`).
     pub version: VersionReq,
-}
-
-pub enum VolumeReferenceType {
-    Directory,
-    Git,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct VolumeReference {
-    /// Path to a directory containing a volume on the local file system.
-    pub path: Option<String>,
-}
-
-impl VolumeReference {
-    pub fn reference_type(&self) -> Option<VolumeReferenceType> {
-        if let Some(_) = self.path {
-            return Some(VolumeReferenceType::Directory);
-        }
-
-        None
-    }
 }
