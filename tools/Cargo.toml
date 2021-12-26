@@ -1,5 +1,5 @@
 [package]
-name = "tools"
+name = "murs-tools"
 version = "0.1.0"
 edition = "2018"
 
@@ -8,7 +8,7 @@ name = "mpk"
 path = "bin/mpk.rs"
 
 [dependencies]
-core = { path = "../core" }
+murs-core = { path = "../core" }
 structopt = "0.3.25"
 serde = "1.0.132"
 serde_derive = "1.0.132"

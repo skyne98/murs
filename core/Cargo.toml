@@ -1,5 +1,5 @@
 [package]
-name = "core"
+name = "murs-core"
 version = "0.1.0"
 authors = ["skyne98 <ahalahan@gmail.com>"]
 edition = "2018"

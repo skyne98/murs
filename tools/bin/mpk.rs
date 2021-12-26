@@ -2,9 +2,9 @@ use anyhow::Result;
 use colored::*;
 use core::{cache::Cache, library::link::LibraryLinkGit};
 use log::info;
+use murs_tools::parse_module_and_units;
 use std::path::PathBuf;
 use structopt::StructOpt;
-use tools::parse_module_and_units;
 
 #[derive(Debug, StructOpt)]
 #[structopt(
