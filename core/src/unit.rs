@@ -1,5 +1,8 @@
+use std::path::Path;
+
 use anyhow::{anyhow, Context, Result};
 use minimad::{parse_text, CompositeStyle, Line};
+use tokio_stream::StreamExt;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Unit {
@@ -36,5 +39,32 @@ impl Unit {
         }
 
         Err(anyhow!("Unit's markdown must start with a header"))
+    }
+
+    pub async fn from_path<P: AsRef<Path>>(root: P) -> Result<Vec<Unit>> {
+        let root = root.as_ref();
+        let read_dir = tokio::fs::read_dir(root).await?;
+        let mut read_dir_stream = tokio_stream::wrappers::ReadDirStream::new(read_dir);
+        let mut files = vec![];
+        while let Some(entry) = read_dir_stream.next().await {
+            if let Ok(entry) = entry {
+                if let Ok(file_type) = entry.file_type().await {
+                    if file_type.is_file() {
+                        let unit_str = tokio::fs::read_to_string(entry.path()).await?;
+                        let name = entry
+                            .path()
+                            .file_stem()
+                            .context("Cannot get file name")?
+                            .to_str()
+                            .context("Cannot convert OsStr to &str")?
+                            .to_string();
+                        let unit = Unit::from_str(name, unit_str).await?;
+                        files.push(unit);
+                    }
+                }
+            }
+        }
+
+        Ok(files)
     }
 }
