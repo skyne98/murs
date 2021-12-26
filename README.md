@@ -54,6 +54,8 @@ Goals of the project include:
 
 ### Built With
 This project is built using exclusively open-source technologies. Markdown is used as the main text format.
+* [Rust](https://www.rust-lang.org/)
+* [Git](https://git-scm.com/)
 * [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
 #### Standards
