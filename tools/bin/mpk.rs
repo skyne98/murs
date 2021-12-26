@@ -1,7 +1,13 @@
 use anyhow::Result;
 use colored::*;
 use log::info;
-use murs_core::{cache::Cache, library::link::LibraryLinkGit};
+use murs_core::{
+    cache::Cache,
+    library::{
+        graph::LibraryResolutionGraph,
+        link::{LibraryLink, LibraryLinkGit},
+    },
+};
 use murs_tools::parse_module_and_units;
 use std::path::PathBuf;
 use structopt::StructOpt;
@@ -57,6 +63,17 @@ enum DebugOpt {
         #[structopt(parse(from_os_str))]
         dir: Option<PathBuf>,
     },
+    #[structopt(name = "lookup", about = "Lookup a module in a given library tree.")]
+    Lookup { lib: String, module: String },
+    #[structopt(
+        name = "require",
+        about = "Lookup a module which satisfies the version requirement in a given library tree."
+    )]
+    Require {
+        lib: String,
+        module: String,
+        version: String,
+    },
 }
 
 #[tokio::main]
@@ -71,7 +88,7 @@ async fn main() -> Result<()> {
             let units = module_and_units.units;
 
             // Build the book
-            let book_build_path = module.package(&units).await?;
+            let book_build_path = module.module.package(&units).await?;
             info!("Book built at {}", book_build_path.display());
         }
         Opt::Serve { dir } => {
@@ -80,7 +97,7 @@ async fn main() -> Result<()> {
             let units = module_and_units.units;
 
             // Build the book
-            let book_build_path = module.package(&units).await?;
+            let book_build_path = module.module.package(&units).await?;
             info!("Book built at {}", book_build_path.display());
 
             // Serve the files
@@ -102,11 +119,32 @@ async fn main() -> Result<()> {
                 branch: Some(branch),
                 commit: None,
             };
-            cache.git(&link).await?;
+            cache.library_link(&LibraryLink::Git(link)).await?;
         }
         Opt::Debug(DebugOpt::Parse { dir }) => {
             let module_and_units = parse_module_and_units(dir).await?;
             println!("{:#?}", module_and_units);
+        }
+        Opt::Debug(DebugOpt::Lookup { lib, module }) => {
+            let cache = Cache::new().await?;
+            let link = lib.parse()?;
+            let lib = cache.library_link(&link).await?;
+            let library_graph = LibraryResolutionGraph::from_roots(vec![lib]).await?;
+            let modules = library_graph.lookup_module(&module).await?;
+            println!("Found: {:#?}", modules);
+        }
+        Opt::Debug(DebugOpt::Require {
+            lib,
+            module,
+            version,
+        }) => {
+            let cache = Cache::new().await?;
+            let link = lib.parse()?;
+            let lib = cache.library_link(&link).await?;
+            let library_graph = LibraryResolutionGraph::from_roots(vec![lib]).await?;
+            let version_req = version.parse()?;
+            let modules = library_graph.best_module(&module, &version_req).await?;
+            println!("Found: {:#?}", modules);
         }
     }
 

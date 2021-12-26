@@ -1,13 +1,13 @@
 use std::path::PathBuf;
 
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use colored::*;
 use directories::UserDirs;
 use git2::Repository;
 use log::info;
 
 use crate::{
-    library::link::LibraryLinkGit,
+    library::{link::LibraryLink, model::LibraryModel},
     utils::{
         fs::{ensure_dir_exists, remove_dir},
         git::do_pull,
@@ -40,9 +40,13 @@ impl Cache {
         ensure_dir_exists(&path).await?;
         Ok(path)
     }
-    pub async fn git(&self, link: &LibraryLinkGit) -> Result<PathBuf> {
-        let repository = &link.url;
-        let branch = link.branch.clone().unwrap_or_else(|| "main".to_string());
+    pub async fn git<S: AsRef<str>, B: AsRef<str>>(
+        &self,
+        repository: S,
+        branch: B,
+    ) -> Result<PathBuf> {
+        let repository = repository.as_ref();
+        let branch = branch.as_ref();
 
         // Hash the repo name
         let repository_hash = hash_str(repository).to_hex().to_string();
@@ -55,7 +59,7 @@ impl Cache {
                 let repository = Repository::open(&repository_path)?;
                 let remote_name = "origin";
                 let mut remote = repository.find_remote(&remote_name)?;
-                do_pull(&repository, &branch, &mut remote)?;
+                do_pull(&repository, branch, &mut remote)?;
             }
 
             let repository = Repository::open(&repository_path)?;
@@ -69,5 +73,18 @@ impl Cache {
         };
 
         Ok(repository_path)
+    }
+
+    pub async fn library_link(&self, link: &LibraryLink) -> Result<LibraryModel> {
+        match link {
+            LibraryLink::Git(link) => {
+                let url = link.url.clone();
+                let branch = link.branch.clone().unwrap_or_else(|| "main".to_string());
+                let path = self.git(url, branch).await?;
+                let model = LibraryModel::from_dir(path, LibraryLink::Git(link.clone())).await?;
+                Ok(model)
+            }
+            _ => Err(anyhow!("Not implemented")),
+        }
     }
 }

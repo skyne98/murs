@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
 pub async fn read_file_bytes<P: AsRef<Path>>(path: P) -> Result<Vec<u8>> {
@@ -20,11 +20,23 @@ pub async fn path_exists<P: AsRef<Path>>(path: P) -> Result<bool> {
 }
 pub async fn path_is_dir<P: AsRef<Path>>(path: P) -> Result<bool> {
     let path = path.as_ref();
-    Ok(tokio::fs::metadata(path).await?.is_dir())
+    if path_exists(path).await? == false {
+        return Ok(false);
+    }
+    Ok(tokio::fs::metadata(path)
+        .await
+        .context(format!("Cannot read directory {:?}", path))?
+        .is_dir())
 }
 pub async fn path_is_file<P: AsRef<Path>>(path: P) -> Result<bool> {
     let path = path.as_ref();
-    Ok(tokio::fs::metadata(path).await?.is_file())
+    if path_exists(path).await? == false {
+        return Ok(false);
+    }
+    Ok(tokio::fs::metadata(path)
+        .await
+        .context(format!("Cannot read file {:?}", path))?
+        .is_file())
 }
 pub async fn ensure_dir_exists<P: AsRef<Path>>(path: P) -> Result<()> {
     let path = path.as_ref();

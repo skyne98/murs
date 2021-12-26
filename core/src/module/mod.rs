@@ -10,9 +10,10 @@ use crate::utils::fs::read_file_str;
 use self::dependency::ModuleDependency;
 
 pub mod dependency;
+pub mod model;
 pub mod ruleset;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Module {
     /// Name used inside the system
     pub name: String,
@@ -26,15 +27,15 @@ pub struct Module {
 }
 
 impl Module {
-    pub async fn from_path<P: AsRef<Path>>(root: P) -> Result<(PathBuf, Module)> {
-        let root = root.as_ref();
-        let manifest_path = root.join("module.toml");
+    pub async fn from_dir<P: AsRef<Path>>(dir: P) -> Result<Module> {
+        let dir = dir.as_ref();
+        let manifest_path = dir.join("module.toml");
         let contents = read_file_str(&manifest_path)
             .await
             .context(format!("Cannot find module.toml at {:?}", manifest_path))?;
         let pkg: Module = toml::from_str(&contents)
             .context("Invalid syntax in module.toml, make sure to follow https://toml.io/en/")?;
 
-        Ok((manifest_path, pkg))
+        Ok(pkg)
     }
 }

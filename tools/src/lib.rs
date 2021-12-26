@@ -1,10 +1,13 @@
 use anyhow::Result;
-use murs_core::{module::Module, unit::Unit};
+use murs_core::{
+    module::{model::ModuleModel, Module},
+    unit::Unit,
+};
 use std::{env::current_dir, path::Path};
 
 #[derive(Debug)]
 pub struct ParsedModuleAndUnits {
-    pub module: Module,
+    pub module: ModuleModel,
     pub units: Vec<Unit>,
 }
 
@@ -18,7 +21,8 @@ pub async fn parse_module_and_units<P: AsRef<Path>>(
         let current_dir = current_dir()?;
         current_dir
     };
-    let (manifest_path, module) = Module::from_path(dir).await?;
+    let module = ModuleModel::from_dir(dir).await?;
+    let manifest_path = module.path.join("module.toml");
 
     let unit_dir = manifest_path.parent().unwrap().join("units");
     let units = Unit::from_path(unit_dir).await?;
