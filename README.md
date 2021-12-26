@@ -14,7 +14,7 @@
   <p align="center"> /ˈmɑɹz/</p>
 
   <p align="center">
-    A modular universal role-playing system
+    A modular universal role-playing system \
     (🚧 under heavy development 🚧)
     <br />
     <a href="https://skyne98.github.io/murs/index.html"><strong>Explore the book »</strong></a>
