@@ -1,8 +1,8 @@
-use std::{collections::HashMap, path::PathBuf};
+use std::collections::HashMap;
 
 use crate::{cache::Cache, module::model::ModuleModel};
 
-use super::{link::LibraryLink, model::LibraryModel, Library};
+use super::model::LibraryModel;
 use anyhow::{anyhow, Result};
 use pathfinding::directed::topological_sort::topological_sort;
 use semver::VersionReq;
@@ -35,6 +35,33 @@ impl LibraryResolutionGraph {
                     to_check.push(child_library);
                 }
             }
+        }
+
+        // Check for cycles
+        let mut visited = HashMap::new();
+        for (name, _) in nodes.iter() {
+            if visited.contains_key(name) {
+                continue;
+            }
+            let mut stack = vec![name.clone()];
+            while let Some(node) = stack.pop() {
+                if visited.contains_key(&node) {
+                    continue;
+                }
+                visited.insert(node.clone(), true);
+                if let Some(children) = children.get(&node) {
+                    for child in children {
+                        stack.push(child.clone());
+                    }
+                }
+            }
+        }
+        if visited.len() != nodes.len() {
+            let mut cycle = vec![];
+            for (name, _) in visited.iter() {
+                cycle.push(name.clone());
+            }
+            return Err(anyhow!("Library graph has a cycle: {:?}", cycle));
         }
 
         Ok(LibraryResolutionGraph {

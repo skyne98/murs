@@ -21,11 +21,14 @@ impl Module {
             ));
         }
 
+        let title = self.title.clone();
+        let version = self.version.clone();
+
         // Setup the book
         let book_directory = tempdir()?.into_path();
         let mut config: Config = Default::default();
         let mut book_config: BookConfig = Default::default();
-        book_config.title = Some(format!("{} {}", self.title.clone(), self.version));
+        book_config.title = Some(format!("{} {}", &title, &version));
         config.book = book_config;
         let mdbook = MDBook::init(&book_directory)
             .with_config(config.clone())
