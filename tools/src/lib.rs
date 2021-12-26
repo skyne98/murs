@@ -1,8 +1,5 @@
 use anyhow::Result;
-use murs_core::{
-    module::{model::ModuleModel, Module},
-    unit::Unit,
-};
+use murs_core::{module::model::ModuleModel, unit::Unit};
 use std::{env::current_dir, path::Path};
 
 #[derive(Debug)]

@@ -3,9 +3,9 @@ use std::path::PathBuf;
 use crate::{module::model::ModuleModel, utils::fs::path_is_file};
 
 use super::{link::LibraryLink, Library, LibraryLinks};
-use anyhow::{anyhow, Result};
+use anyhow::Result;
 use colored::*;
-use log::{debug, info, warn};
+use log::warn;
 
 #[derive(Debug, Clone)]
 pub struct LibraryModel {
