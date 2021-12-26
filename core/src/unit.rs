@@ -4,6 +4,8 @@ use anyhow::{anyhow, Context, Result};
 use minimad::{parse_text, CompositeStyle, Line};
 use tokio_stream::StreamExt;
 
+use crate::utils::fs::read_file_str;
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Unit {
     /// Unique name of the unit used to refer to it from other modules and units via `<module-name>/<unit-name>` or `<unit-name>`.
@@ -50,7 +52,7 @@ impl Unit {
             if let Ok(entry) = entry {
                 if let Ok(file_type) = entry.file_type().await {
                     if file_type.is_file() {
-                        let unit_str = tokio::fs::read_to_string(entry.path()).await?;
+                        let unit_str = read_file_str(entry.path()).await?;
                         let name = entry
                             .path()
                             .file_stem()

@@ -5,6 +5,8 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use crate::utils::fs::read_file_str;
+
 use self::dependency::ModuleDependency;
 
 pub mod dependency;
@@ -27,7 +29,7 @@ impl Module {
     pub async fn from_path<P: AsRef<Path>>(root: P) -> Result<(PathBuf, Module)> {
         let root = root.as_ref();
         let manifest_path = root.join("module.toml");
-        let contents = tokio::fs::read_to_string(&manifest_path)
+        let contents = read_file_str(&manifest_path)
             .await
             .context(format!("Cannot find module.toml at {:?}", manifest_path))?;
         let pkg: Module = toml::from_str(&contents)

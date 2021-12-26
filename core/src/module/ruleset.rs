@@ -5,12 +5,22 @@ use log::info;
 use mdbook::{config::BookConfig, Config, MDBook};
 use tempfile::tempdir;
 
-use crate::{unit::Unit, utils::fs::clear_dir};
+use crate::{
+    unit::Unit,
+    utils::fs::{clear_dir, write_file_str},
+};
 
 use super::Module;
 
 impl Module {
     pub async fn package(&self, units: &Vec<Unit>) -> Result<PathBuf> {
+        if self.ruleset == false {
+            return Err(anyhow::anyhow!(
+                "Module {} is not a ruleset, mark it as such in module.toml",
+                self.name
+            ));
+        }
+
         // Setup the book
         let book_directory = tempdir()?.into_path();
         let mut config: Config = Default::default();
@@ -32,12 +42,12 @@ impl Module {
         // - Populate the SUMMARY.md
         let summary_path = src_dir.join("SUMMARY.md");
         let summary_contents = self.summary(units);
-        tokio::fs::write(summary_path, summary_contents).await?;
+        write_file_str(summary_path, &summary_contents).await?;
 
         // - Populate units
         for unit in units {
             let unit_path = src_dir.join(format!("{}.md", unit.name));
-            tokio::fs::write(unit_path, &unit.contents).await?;
+            write_file_str(unit_path, &unit.contents).await?;
         }
 
         // Make a build

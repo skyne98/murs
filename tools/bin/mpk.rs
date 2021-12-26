@@ -1,9 +1,8 @@
 use anyhow::Result;
 use colored::*;
-use core::{cache::Cache, module::Module, unit::Unit};
-use indicatif::ProgressBar;
+use core::{cache::Cache, library::link::LibraryLinkGit};
 use log::info;
-use std::{env::current_dir, path::PathBuf};
+use std::path::PathBuf;
 use structopt::StructOpt;
 use tools::parse_module_and_units;
 
@@ -98,7 +97,12 @@ async fn main() -> Result<()> {
         Opt::Cache(CacheOpt::Git(CacheGitOpt::Ensure { url, branch })) => {
             let cache = Cache::new().await?;
             info!("Updating repository {}...", url.yellow());
-            cache.git(&url, &branch).await?;
+            let link = LibraryLinkGit {
+                url,
+                branch: Some(branch),
+                commit: None,
+            };
+            cache.git(&link).await?;
         }
         Opt::Debug(DebugOpt::Parse { dir }) => {
             let module_and_units = parse_module_and_units(dir).await?;

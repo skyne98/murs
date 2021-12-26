@@ -1,14 +1,18 @@
 use std::path::PathBuf;
 
 use anyhow::Result;
+use colored::*;
 use directories::UserDirs;
 use git2::Repository;
 use log::info;
 
-use crate::utils::{
-    fs::{ensure_dir_exists, remove_dir},
-    git::do_pull,
-    hash::hash_str,
+use crate::{
+    library::link::LibraryLinkGit,
+    utils::{
+        fs::{ensure_dir_exists, remove_dir},
+        git::do_pull,
+        hash::hash_str,
+    },
 };
 
 pub struct Cache {
@@ -36,13 +40,9 @@ impl Cache {
         ensure_dir_exists(&path).await?;
         Ok(path)
     }
-    pub async fn git<S: AsRef<str>, B: AsRef<str>>(
-        &self,
-        repository: S,
-        branch: B,
-    ) -> Result<PathBuf> {
-        let repository = repository.as_ref();
-        let branch = branch.as_ref();
+    pub async fn git(&self, link: &LibraryLinkGit) -> Result<PathBuf> {
+        let repository = &link.url;
+        let branch = link.branch.clone().unwrap_or_else(|| "main".to_string());
 
         // Hash the repo name
         let repository_hash = hash_str(repository).to_hex().to_string();
@@ -51,18 +51,18 @@ impl Cache {
         if repository_path.exists() {
             // Pull the repository
             {
-                info!("Pulling repository {}", repository);
+                info!("Pulling repository {}...", repository.yellow());
                 let repository = Repository::open(&repository_path)?;
                 let remote_name = "origin";
                 let mut remote = repository.find_remote(&remote_name)?;
-                do_pull(&repository, branch, &mut remote)?;
+                do_pull(&repository, &branch, &mut remote)?;
             }
 
             let repository = Repository::open(&repository_path)?;
             repository
         } else {
             // Clone the repository
-            info!("Cloning repository {}", repository);
+            info!("Cloning repository {}...", repository.yellow());
             let url = repository;
             let repository = Repository::clone(url, &repository_path)?;
             repository

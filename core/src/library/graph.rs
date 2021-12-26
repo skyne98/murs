@@ -4,12 +4,21 @@ use super::{link::LibraryLink, Library};
 use anyhow::{anyhow, Result};
 use pathfinding::directed::topological_sort::topological_sort;
 
+pub const DEFAULT_ROOT: &str = "https://github.com/skyne98/murs-library";
+
 pub struct LibraryResolutionGraph {
     pub roots: Vec<String>,
     pub nodes: HashMap<String, LibraryResolutionGraphNode>,
     pub children: HashMap<String, Vec<String>>,
 }
 impl LibraryResolutionGraph {
+    pub fn new(roots: Vec<String>) -> Self {
+        LibraryResolutionGraph {
+            roots,
+            nodes: HashMap::new(),
+            children: HashMap::new(),
+        }
+    }
     pub fn sorted_nodes(&self) -> Result<Vec<&LibraryResolutionGraphNode>> {
         // Topologically sort the graph nodes from roots to leaves
         let sorted_nodes = topological_sort(&self.roots, |node_id| {

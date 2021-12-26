@@ -18,13 +18,13 @@ impl LibraryLink {
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LibraryLinkGit {
-    url: String,
+    pub url: String,
 
     // main/master HEAD is missing
-    branch: Option<String>,
-    commit: Option<String>,
+    pub branch: Option<String>,
+    pub commit: Option<String>,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LibraryLinkLocal {
-    path: String,
+    pub path: String,
 }
