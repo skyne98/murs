@@ -37,6 +37,7 @@
 - [Table of Contents](#table-of-contents)
 - [About The Project](#about-the-project)
   - [Built With](#built-with)
+    - [Standards](#standards)
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -55,4 +56,7 @@ Goals of the project include:
 This project is built using exclusively open-source technologies. Markdown is used as the main text format.
 * [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
-
+#### Standards
+We try to follow some industry best practices and standards.
+* [Semantic Versioning](https://semver.org/)
+* [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
