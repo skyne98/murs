@@ -21,7 +21,7 @@ enum Opt {
     #[structopt(
         name = "package",
         alias = "pkg",
-        about = "Package the contents of a module into a book."
+        about = "Package the contents of a module into a book"
     )]
     Package {
         #[structopt(parse(from_os_str))]
@@ -29,45 +29,45 @@ enum Opt {
     },
     #[structopt(
         name = "serve",
-        about = "Package the contents of a module into a book and serve it."
+        about = "Package the contents of a module into a book and serve it"
     )]
     Serve {
         #[structopt(parse(from_os_str))]
         dir: Option<PathBuf>,
     },
-    #[structopt(name = "cache", about = "Commands used for operating the MURS cache.")]
+    #[structopt(name = "cache", about = "Commands used for operating the MURS cache")]
     Cache(CacheOpt),
-    #[structopt(name = "debug", about = "Commands used for debugging purposes.")]
+    #[structopt(name = "debug", about = "Commands used for debugging purposes")]
     Debug(DebugOpt),
 }
 #[derive(Debug, StructOpt)]
 enum CacheOpt {
-    #[structopt(name = "clean", about = "Completely empty the MURS cache.")]
-    Clean {},
+    #[structopt(name = "clear", about = "Completely empty the MURS cache")]
+    Clear {},
     #[structopt(
         name = "git",
-        about = "Commands used for operating git repositories in the cache."
+        about = "Commands used for operating git repositories in the cache"
     )]
     Git(CacheGitOpt),
 }
 #[derive(Debug, StructOpt)]
 enum CacheGitOpt {
-    #[structopt(name = "ensure", about = "Clone or pull the repository.")]
+    #[structopt(name = "ensure", about = "Clone or pull the repository")]
     Ensure { url: String, branch: String },
 }
 
 #[derive(Debug, StructOpt)]
 enum DebugOpt {
-    #[structopt(name = "parse", about = "Parse the module and units.")]
+    #[structopt(name = "parse", about = "Parse the module and units")]
     Parse {
         #[structopt(parse(from_os_str))]
         dir: Option<PathBuf>,
     },
-    #[structopt(name = "lookup", about = "Lookup a module in a given library tree.")]
+    #[structopt(name = "lookup", about = "Lookup a module in a given library tree")]
     Lookup { lib: String, module: String },
     #[structopt(
         name = "require",
-        about = "Lookup a module which satisfies the version requirement in a given library tree."
+        about = "Lookup a module which satisfies the version requirement in a given library tree"
     )]
     Require {
         lib: String,
@@ -106,7 +106,7 @@ async fn main() -> Result<()> {
                 .run(([127, 0, 0, 1], 3030))
                 .await;
         }
-        Opt::Cache(CacheOpt::Clean {}) => {
+        Opt::Cache(CacheOpt::Clear {}) => {
             let cache = Cache::new().await?;
             info!("Emptying the cache...");
             cache.clean().await?;
